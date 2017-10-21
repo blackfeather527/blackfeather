@@ -6,4 +6,4 @@ handlers:
   script: index.php
 
 - url: /.*
-  script:$1
+  script: $1
