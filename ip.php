@@ -1,5 +1,6 @@
 <?php
     header("Content-Type: text/plain; charset=utf8");
+    echo "ip :";
     $ip;
     if(isset($_SERVER)){
         if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
