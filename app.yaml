@@ -1,7 +1,9 @@
 runtime: php55
 api_version: 1
+
 handlers:
 - url: /
   script: index.php
+
 - url: /.*
   script:$1
