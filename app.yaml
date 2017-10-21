@@ -4,6 +4,3 @@ api_version: 1
 handlers:
 - url: /ip\.php
   script: ip.php
-  
-- url: /test\.php
-  script: test.php
