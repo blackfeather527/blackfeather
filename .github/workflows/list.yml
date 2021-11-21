@@ -19,7 +19,7 @@ jobs:
         run: |
           wget -q ${{ env.GEOIP_SHA256 }}
           wget -q ${{ env.GEOSITE_SHA256 }}
-          echo $(cat ${{ github.workspace }}/geoip.dat.sha256.sum)
-          echo $(cat ${{ github.workspace }}/geoip.dat.sha256.sum)
+          echo $(cat ${{ github.workspace }}/geoip.dat.sha256sum)
+          echo $(cat ${{ github.workspace }}/geosite.dat.sha256sum)
           ls ${{ github.workspace }}
       
