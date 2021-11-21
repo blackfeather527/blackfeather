@@ -93,7 +93,10 @@ jobs:
           echo "$line lines"
           
           printf 'create chnlist.txt'
-          echo "$chnlist_tmp" | sort -u > ${{ github.workspace }}/resource/chnlist.txt
+          
+          chnlist_all=chnlist1=$(echo "$chnlist_tmp";cat ${{ github.workspace }}/resource/geosite_cn.txt;cat ${{ github.workspace }}/resource/geosite_geolocation-!cn.txt)
+          
+          echo "$chnlist_all" | sort -u > ${{ github.workspace }}/resource/chnlist.txt
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/release/gfwlist.txt | uniq -d > ${{ github.workspace }}/resource/diff.txt
           echo 'regexp:.+\.cn$' >> ${{ github.workspace }}/resource/chnlist.txt
           cat ${{ github.workspace }}/resource/chnlist.txt | grep -v '\.' | grep -v '^xn--' >> ${{ github.workspace }}/resource/diff.txt
