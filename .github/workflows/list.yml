@@ -1,7 +1,12 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  env:
+    GEOIP: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+    GEOSITE: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+    GEOIP_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
+    GEOSITE_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
+  Get-All-List:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -11,13 +16,10 @@ jobs:
         with:
           perl-version: '5.34'
       - name: Update GFWList
-        env:
-          GEOIP: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-          GEOSITE: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-          GEOIP_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
-          GEOSITE_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
         run: |
           wget -q ${{ env.GEOIP_SHA256 }}
           wget -q ${{ env.GEOSITE_SHA256 }}
+          echo $(cat ${{ github.workspace }}/geoip.dat.sha256.sum)
+          echo $(cat ${{ github.workspace }}/geoip.dat.sha256.sum)
           ls ${{ github.workspace }}
       
