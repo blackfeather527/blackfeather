@@ -117,9 +117,8 @@ jobs:
           echo "$(awk '{print NR}' ${{ github.workspace }}/release/ipslist.txt | tail -n1) lines"
           
           echo "----------------------------------"
-          ls ${{ github.workspace }}
-          echo "----------------------------------"
-          ls ${{ github.workspace }}/resource
+          ls ${{ github.workspace }}/release
+          
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
         with:
