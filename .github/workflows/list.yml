@@ -108,7 +108,7 @@ jobs:
           echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/release/adslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/release/adslist.txt | tail -n1) lines"
           
-          printf 'create ipslist.txt'
+          printf 'create ipslist.txt '
           
           list1=$(cat ${{ github.workspace }}/resource/geoip_cn.txt;echo "$apnic_tmp" | grep CN | grep ipv4 | awk -F'|' '{printf("%s/%d\n", $4, 32-log($5)/log(2))}';echo "$apnic_tmp" | grep CN | grep ipv6 | awk -F'|' '{printf("%s/%d\n", $4, $5)}')
           list2=$(echo "$list1" | sort -u)
