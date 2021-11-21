@@ -26,5 +26,5 @@ jobs:
           wget -q ${{ env.CHNLIST }} -O ${{ github.workspace }}/resource/accelerated-domains.china.conf
           wget -q ${{ env.APNICIP }} -O ${{ github.workspace }}/resource/delegated-apnic-latest.txt
           wget -q ${{ env.OISD }} -O ${{ github.workspace }}/resource/oisd_dbl.txt
-          ls ${{ github.workspace }}
+          ls ${{ github.workspace }}/resource
       
