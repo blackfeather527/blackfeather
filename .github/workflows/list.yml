@@ -6,8 +6,10 @@ jobs:
     env:
       GEOIP: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
       GEOSITE: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-      GEOIP_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
-      GEOSITE_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
+      GFWLIST: https://raw.github.com/gfwlist/gfwlist/master/gfwlist.txt
+      CHNLIST: https://raw.github.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
+      APNICIP: http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest
+      OISD: https://dbl.oisd.nl/
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -17,9 +19,12 @@ jobs:
           perl-version: '5.34'
       - name: Update GFWList
         run: |
-          wget -q ${{ env.GEOIP_SHA256 }}
-          wget -q ${{ env.GEOSITE_SHA256 }}
-          echo $(cat ${{ github.workspace }}/geoip.dat.sha256sum)
-          echo $(cat ${{ github.workspace }}/geosite.dat.sha256sum)
+          mkdir -p ${{ github.workspace }}/resource
+          wget -q ${{ env.GEOIP }} -O ${{ github.workspace }}/resource/geoip.dat
+          wget -q ${{ env.GEOSITE }} -O ${{ github.workspace }}/resource/geosite.dat
+          wget -q ${{ env.GFWLIST }} -O ${{ github.workspace }}/resource/gfwlist.txt
+          wget -q ${{ env.CHNLIST }} -O ${{ github.workspace }}/resource/accelerated-domains.china.conf
+          wget -q ${{ env.APNICIP }} -O ${{ github.workspace }}/resource/delegated-apnic-latest.txt
+          wget -q ${{ env.OISD }} -O ${{ github.workspace }}/resource/oisd_dbl.txt
           ls ${{ github.workspace }}
       
