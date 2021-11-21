@@ -1,13 +1,13 @@
 name: GitHub Actions Demo
 on: [push]
 jobs:
-  env:
-    GEOIP: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-    GEOSITE: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
-    GEOIP_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
-    GEOSITE_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
   Get-All-List:
     runs-on: ubuntu-latest
+      env:
+        GEOIP: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+        GEOSITE: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+        GEOIP_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat.sha256sum
+        GEOSITE_SHA256: https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat.sha256sum
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
