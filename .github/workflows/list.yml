@@ -85,10 +85,22 @@ jobs:
           oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
           echo "----------------------------------"
-          echo "create gfwlist.txt"
+          printf 'create gfwlist.txt '
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/release/gfwlist.txt
-          awk '{print NR}' ${{ github.workspace }}/release/gfwlist.txt|tail -n1
+          
+          line=$(awk '{print NR}' ${{ github.workspace }}/release/gfwlist.txt |tail -n1)
+          echo "$line lines"
+          
+          printf 'create chnlist.txt'
+          echo "$chnlist_tmp" | sort -u > ${{ github.workspace }}/resource/chnlist.txt
+          sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/release/gfwlist.txt | uniq -d > ${{ github.workspace }}/resource/diff.txt
+          echo 'regexp:.+\.cn$' >> ${{ github.workspace }}/resource/chnlist.txt
+          cat ${{ github.workspace }}/resource/chnlist.txt | grep -v '\.' | grep -v '^xn--' >> ${{ github.workspace }}/resource/diff.txt
+          sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/release/chnlist.txt
+          line=$(awk '{print NR}' ${{ github.workspace }}/release/chnlist.txt |tail -n1)
+          echo "$line lines"
+          
           echo "----------------------------------"
           ls ${{ github.workspace }}
           echo "----------------------------------"
