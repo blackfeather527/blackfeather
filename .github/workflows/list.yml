@@ -12,13 +12,11 @@ jobs:
       OISD: https://dbl.oisd.nl/
       MOSDNS: https://github.com/IrineSistiana/mosdns/releases/download/v2.1.2/mosdns-linux-amd64.zip
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v2
-      - name: Install Perl
+      - name: Install perl
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.34'
-      - name: Update GFWList
+      - name: Update list
         run: |
           set -o errexit
           set -o pipefail
