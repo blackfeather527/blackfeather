@@ -92,7 +92,7 @@ jobs:
           line=$(awk '{print NR}' ${{ github.workspace }}/release/gfwlist.txt |tail -n1)
           echo "$line lines"
           
-          printf 'create chnlist.txt'
+          printf 'create chnlist.txt '
           
           chnlist_all=chnlist1=$(echo "$chnlist_tmp";cat ${{ github.workspace }}/resource/geosite_cn.txt;cat ${{ github.workspace }}/resource/geosite_geolocation-!cn.txt)
           
@@ -103,6 +103,13 @@ jobs:
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/release/chnlist.txt
           line=$(awk '{print NR}' ${{ github.workspace }}/release/chnlist.txt |tail -n1)
           echo "$line lines"
+          
+          printf 'create adslist.txt '
+          
+          adslist=$(printf "$oisd_tmp" | grep -v '^#';cat ${{ github.workspace }}/resource/geosite_category-ads-all.txt;cat ${{ github.workspace }}/resource/geosite_win-extra.txt;cat ${{ github.workspace }}/resource/geosite_win-spy.txt;)
+          echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/release/adslist.txt
+          echo "$(awk '{print NR}' ${{ github.workspace }}/release/adslist.txt |tail -n1) lines"
+          
           
           echo "----------------------------------"
           ls ${{ github.workspace }}
