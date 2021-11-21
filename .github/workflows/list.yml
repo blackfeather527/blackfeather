@@ -48,6 +48,7 @@ jobs:
           [ "$base64_decode" ] || { echo "option not supported: base64 -d/--decode"; exit 1; }
           
           mkdir -p ${{ github.workspace }}/resource
+          mkdir -p ${{ github.workspace }}/release
           wget -q ${{ env.MOSDNS }} -O ${{ github.workspace }}/mosdns.zip
           unzip -q -d ${{ github.workspace }}/mosdns-master ${{ github.workspace }}/mosdns.zip
           
@@ -71,16 +72,24 @@ jobs:
           ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:win-extra > /dev/null 2>&1
           ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:win-update > /dev/null 2>&1
           
-          wget -q ${{ env.GFWLIST }} -O ${{ github.workspace }}/resource/gfwlist.txt
           echo "download gfwlist.txt"
+          gfwlist_tmp=$(wget -qO- ${{ env.GFWLIST }})
           
-          wget -q ${{ env.CHNLIST }} -O ${{ github.workspace }}/resource/accelerated-domains.china.conf
+          echo "download accelerated-domains.china.conf"
+          chnlist_tmp=$(wget -qO- ${{ env.CHNLIST }} | awk -F/ '{print $2}' | sort -u)
           
-          wget -q ${{ env.APNICIP }} -O ${{ github.workspace }}/resource/delegated-apnic-latest.txt
+          echo "download delegated-apnic-latest"
+          apnic_tmp=$(wget -qO- ${{ env.APNICIP }})
           
-          wget -q ${{ env.OISD }} -O ${{ github.workspace }}/resource/oisd_dbl.txt
+          echo "download dbl-oisd-list"
+          oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
-          
+          echo "----------------------------------"
+          echo "create gfwlist.txt"
+          gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
+          echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/release/gfwlist.txt
+          awk '{print NR}' ${{ github.workspace }}/release/gfwlist.txt|tail -n1
+          echo "----------------------------------"
           ls ${{ github.workspace }}
           echo "----------------------------------"
           ls ${{ github.workspace }}/resource
