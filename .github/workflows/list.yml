@@ -49,8 +49,11 @@ jobs:
           
           mkdir -p ${{ github.workspace }}/resource
           wget -q ${{ env.MOSDNS }} -O ${{ github.workspace }}/mosdns.zip
-          unzip -d ${{ github.workspace }}/mosdns ${{ github.workspace }}/mosdns.zip
-          ls ${{ github.workspace }}/mosdns
+          unzip -d -q ${{ github.workspace }}/mosdns-master ${{ github.workspace }}/mosdns.zip
+          
+          mv ${{ github.workspace }}/mosdns-master/mosdns ${{ github.workspace }}/mosdns 
+          chmod 755 ${{ github.workspace }}/mosdns
+          
           wget -q ${{ env.GEOIP }} -O ${{ github.workspace }}/resource/geoip.dat
           wget -q ${{ env.GEOSITE }} -O ${{ github.workspace }}/resource/geosite.dat
           wget -q ${{ env.GFWLIST }} -O ${{ github.workspace }}/resource/gfwlist.txt
