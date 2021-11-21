@@ -55,12 +55,32 @@ jobs:
           chmod 755 ${{ github.workspace }}/mosdns
           
           wget -q ${{ env.GEOIP }} -O ${{ github.workspace }}/resource/geoip.dat
+          echo "download geoip.dat"
+          
           wget -q ${{ env.GEOSITE }} -O ${{ github.workspace }}/resource/geosite.dat
+          echo "download geosite.dat"
+          
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:geolocation-!cn >/dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:cn >/dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:gfw >/dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:greatfire >/dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-ip-dat ${{ github.workspace }}/resource/geoip.dat:cn > /dev/null 2>&1
+
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:category-ads-all > /dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:win-spy > /dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:win-extra > /dev/null 2>&1
+          ${{ github.workspace }}/mosdns -conv-v2ray-domain-dat ${{ github.workspace }}/resource/geosite.dat:win-update > /dev/null 2>&1
+          
           wget -q ${{ env.GFWLIST }} -O ${{ github.workspace }}/resource/gfwlist.txt
+          echo "download gfwlist.txt"
+          
           wget -q ${{ env.CHNLIST }} -O ${{ github.workspace }}/resource/accelerated-domains.china.conf
+          
           wget -q ${{ env.APNICIP }} -O ${{ github.workspace }}/resource/delegated-apnic-latest.txt
+          
           wget -q ${{ env.OISD }} -O ${{ github.workspace }}/resource/oisd_dbl.txt
           
           
+          ls ${{ github.workspace }}
+          echo "----------------------------------"
           ls ${{ github.workspace }}/resource
-      
