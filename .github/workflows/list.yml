@@ -6,6 +6,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+      - name: run command
         run: |
           ls ${{ github.workspace }}
       
