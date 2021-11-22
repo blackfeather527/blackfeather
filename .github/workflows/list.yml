@@ -121,6 +121,7 @@ jobs:
           ls ${{ github.workspace }}/release
       - name: Check sha256sum
         run: |
+          ls /etc/ld.so.conf.d
           sudo apt-get update
           sudo apt-get install openssl
           openssl help
