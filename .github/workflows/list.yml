@@ -52,7 +52,7 @@ jobs:
             for file in $filelist
             do
               sudo openssl enc -aes-256-ofb -k "$3" -md sha512 -pbkdf2 -iter 100000 -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/release/$file
-              echo "$2 $(sha256sum ${{ github.workspace }}/release/$file | awk '{print $1}')" >> ${{ github.workspace }}/$2.checksum
+              echo "$file $(sha256sum ${{ github.workspace }}/release/$file | awk '{print $1}')" >> ${{ github.workspace }}/$2.checksum
             done
           }
 
@@ -117,6 +117,7 @@ jobs:
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
+          
           create_update_info gfwlist.txt glist "$rkey"
 
           
@@ -129,9 +130,7 @@ jobs:
           cat ${{ github.workspace }}/resource/chnlist.txt | grep -v '\.' | grep -v '^xn--' >> ${{ github.workspace }}/resource/diff.txt
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/tmp/chnlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/chnlist.txt | tail -n1) lines"
-          split -l 500000 ${{ github.workspace }}/tmp/chnlist.txt -d -a 2 ${{ github.workspace }}/tmp/clist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/chnlist.txt | awk '{print $1}')" > ${{ github.workspace }}/clist.checksum
-          ls ${{ github.workspace }}/tmp | grep clist_ > ${{ github.workspace }}/clist.filelist
+          create_update_info chnlist.txt clist "$rkey"
           
           
           printf 'create adslist.txt '
@@ -139,9 +138,7 @@ jobs:
           adslist=$(printf "$oisd_tmp" | grep -v '^#';cat ${{ github.workspace }}/resource/geosite_category-ads-all.txt;cat ${{ github.workspace }}/resource/geosite_win-extra.txt;cat ${{ github.workspace }}/resource/geosite_win-spy.txt;)
           echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/tmp/adslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/adslist.txt | tail -n1) lines"
-          split -l 500000 ${{ github.workspace }}/tmp/adslist.txt -d -a 2 ${{ github.workspace }}/tmp/alist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/adslist.txt | awk '{print $1}')" > ${{ github.workspace }}/alist.checksum
-          ls ${{ github.workspace }}/tmp | grep alist_ > ${{ github.workspace }}/alist.filelist
+          create_update_info adslist.txt alist "$rkey"
           
           
           printf 'create ipslist.txt '
@@ -151,9 +148,7 @@ jobs:
           echo "$list2" | grep -v ':' | sort -t '.' -k1,1n -k2,2n -k3,3n > ${{ github.workspace }}/tmp/ipslist.txt
           echo "$list2" | grep ':' | awk -F: '{print strtonum("0x"$1),strtonum("0x"$2),$0}' | sort -k1,1n -k2,2n | awk '{print $3}' >> ${{ github.workspace }}/tmp/ipslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/ipslist.txt | tail -n1) lines"
-          split -l 500000 ${{ github.workspace }}/tmp/ipslist.txt -d -a 2 ${{ github.workspace }}/tmp/ilist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/ilist.checksum
-          ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/ilist.filelist
+          create_update_info ipslist.txt ilist "$rkey"
 
           rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
           rm -rf ${{ github.workspace }}/tmp/chnlist.txt
