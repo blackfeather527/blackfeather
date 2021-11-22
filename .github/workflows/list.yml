@@ -95,7 +95,7 @@ jobs:
           rkey=$(head -c 32 /dev/random | base64)
           echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/resource/rsa.key
           skey=$(echo -n "$rkey" | sudo openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/resource/rsa.key | sudo openssl enc -A -base64)
-          echo "$skey" > ${{ github.workspace }}/release/checkkey
+          echo "$skey" > ${{ github.workspace }}/checkkey
           printf 'create gfwlist.txt '
           
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
@@ -151,7 +151,7 @@ jobs:
           do
             sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/$file
           done
-          ls ${{ github.workspace }}/release
+          ls ${{ github.workspace }}
           echo "::set-output name=status::success"
 
       - name: Generate release tag
