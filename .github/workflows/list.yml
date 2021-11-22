@@ -90,7 +90,6 @@ jobs:
           
           echo "create Secrets"
           sudo cat /proc/sys/kernel/random/entropy_avail
-          sudo cat /proc/sys/kernel/random/read_wakeup_threshold
           printf 'create gfwlist.txt '
           
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
