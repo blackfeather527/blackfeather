@@ -121,6 +121,8 @@ jobs:
           ls ${{ github.workspace }}/release
       - name: Check sha256sum
         run: |
+          apt-get update
+          apt-get install openssl
           openssl help
           touch ${{ github.workspace }}/release/checklist
           update_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
