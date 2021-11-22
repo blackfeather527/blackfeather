@@ -197,3 +197,10 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Push commit
+        run: |
+          git config --global user.name "secrets.USERNAME"
+          git config --global user.email "secrets.USEREMAIL"
+          git commit -am "Automated report"
+          git push
