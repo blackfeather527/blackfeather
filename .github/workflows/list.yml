@@ -92,7 +92,7 @@ jobs:
           rkey=$(head -c 32 /dev/random) | base64
           touch ${{ github.workspace }}/release/checklist
           echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/tmp/rsa.key
-          skey=$(echo -n "$rkey" | openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/tmp/rsa.key | openssl enc -A -base64)
+          skey=$(echo -n "$rkey" | sudo openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/tmp/rsa.key | sudo openssl enc -A -base64)
           echo "$skey"
           echo "$skey" >> ${{ github.workspace }}/release/checklist
           printf 'create gfwlist.txt '
