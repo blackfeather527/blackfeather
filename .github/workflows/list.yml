@@ -90,7 +90,6 @@ jobs:
           echo "----------------------------------"
           
           echo "create Secrets"
-          $(head -c 32 /dev/random | base64)
           rkey=$(head -c 32 /dev/random | base64)
           echo "$rkey"
           touch ${{ github.workspace }}/release/checklist
