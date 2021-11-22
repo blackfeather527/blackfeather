@@ -150,7 +150,7 @@ jobs:
           filelist=$(ls ${{ github.workspace }}/tmp/)
           for file in $filelist
           do
-            sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/$file
+            sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/release/$file
           done
           
           rm -rf ${{ github.workspace }}/tmp
@@ -160,6 +160,8 @@ jobs:
           rm -rf ${{ github.workspace }}/mosdns-master
           
           ls ${{ github.workspace }}
+          echo "----------------------------------"
+          ls ${{ github.workspace }}/release
           echo "::set-output name=status::success"
 
       - name: Generate release tag
