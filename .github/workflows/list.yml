@@ -100,7 +100,7 @@ jobs:
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
-          sudo openssl enc aes-256-ofb -k $rkey -e -in ${{ github.workspace }}/tmp/gfwlist.txt -out ${{ github.workspace }}/release/enclist_1
+          sudo openssl enc -aes-256-ofb -k $rkey -e -in ${{ github.workspace }}/tmp/gfwlist.txt -out ${{ github.workspace }}/release/enclist_1
           
           printf 'create chnlist.txt '
           
