@@ -46,6 +46,7 @@ jobs:
           '
 
           create_update_info() {
+            echo $(date "+%Y-%m-%d %H:%M:%S") > ${{ github.workspace }}/check_time
             file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
             old_checksum=$(head -n +1  ${{ github.workspace }}/$2.checksum | awk '{print $2}')
             if [ "$file_checksum" != "$old_checksum" ];then
