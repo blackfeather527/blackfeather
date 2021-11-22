@@ -1,5 +1,9 @@
 name: GitHub Actions Demo
-on: [push]
+on: 
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 19 * * *'
 jobs:
   Get-All-List:
     runs-on: ubuntu-latest
