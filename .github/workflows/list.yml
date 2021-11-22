@@ -19,6 +19,14 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.34'
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          
+
       - name: Update list
         run: |
           set -o errexit
@@ -148,12 +156,7 @@ jobs:
           echo "$hash_adslist $update_time $check_time" >> ${{ github.workspace }}/release/checklist
           echo "$hash_ipslist $update_time $check_time" >> ${{ github.workspace }}/release/checklist
 
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          
+
       - name: Generate release tag
         id: tag
         if: (!cancelled())
