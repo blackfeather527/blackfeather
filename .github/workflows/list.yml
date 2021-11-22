@@ -102,6 +102,8 @@ jobs:
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
           sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/gfwlist.txt -out ${{ github.workspace }}/release/glist
+          tar zcvf ${{ github.workspace }}/release/glist.tar.gz ${{ github.workspace }}/release/glist
+          
           
           printf 'create chnlist.txt '
           
@@ -114,6 +116,7 @@ jobs:
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/tmp/chnlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/chnlist.txt | tail -n1) lines"
           sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/chnlist.txt -out ${{ github.workspace }}/release/clist
+          tar zcvf ${{ github.workspace }}/release/clist.tar.gz ${{ github.workspace }}/release/clist
           
           printf 'create adslist.txt '
           
@@ -121,6 +124,7 @@ jobs:
           echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/tmp/adslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/adslist.txt | tail -n1) lines"
           sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/adslist.txt -out ${{ github.workspace }}/release/alist
+          tar zcvf ${{ github.workspace }}/release/alist.tar.gz ${{ github.workspace }}/release/alist
           
           printf 'create ipslist.txt '
           
@@ -130,6 +134,7 @@ jobs:
           echo "$list2" | grep ':' | awk -F: '{print strtonum("0x"$1),strtonum("0x"$2),$0}' | sort -k1,1n -k2,2n | awk '{print $3}' >> ${{ github.workspace }}/tmp/ipslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/ipslist.txt | tail -n1) lines"
           sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/ipslist.txt -out ${{ github.workspace }}/release/ilist
+          tar zcvf ${{ github.workspace }}/release/ilist.tar.gz ${{ github.workspace }}/release/ilist
           
           echo "----------------------------------"
           echo "::set-output name=status::success"
