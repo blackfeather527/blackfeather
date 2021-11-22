@@ -122,7 +122,7 @@ jobs:
 
       - name: Check sha256sum
         run: |
-          echo ${{ secrets.MYRSA_KEY }} >> ${{ github.workspace }}/resource/key
+          echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/resource/key
           touch ${{ github.workspace }}/release/checklist
           update_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
           check_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
