@@ -141,18 +141,24 @@ jobs:
           echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/ilist.checksum
           ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/ilist.filelist
 
-          rm -rf ${{ github.workspace }}/tmp
-          rm -rf ${{ github.workspace }}/resource
-          rm -rf ${{ github.workspace }}/mosdns.zip
-          rm -rf ${{ github.workspace }}/mosdns
-          rm -rf ${{ github.workspace }}/mosdns-master
-          
+          rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
+          rm -rf ${{ github.workspace }}/tmp/chnlist.txt
+          rm -rf ${{ github.workspace }}/tmp/adslist.txt
+          rm -rf ${{ github.workspace }}/tmp/ipslist.txt
+
           echo "----------------------------------"          
           filelist=$(ls ${{ github.workspace }}/tmp/)
           for file in $filelist
           do
             sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/$file
           done
+          
+          rm -rf ${{ github.workspace }}/tmp
+          rm -rf ${{ github.workspace }}/resource
+          rm -rf ${{ github.workspace }}/mosdns.zip
+          rm -rf ${{ github.workspace }}/mosdns
+          rm -rf ${{ github.workspace }}/mosdns-master
+          
           ls ${{ github.workspace }}
           echo "::set-output name=status::success"
 
