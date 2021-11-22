@@ -118,7 +118,7 @@ jobs:
           
           echo "----------------------------------"
           ls ${{ github.workspace }}/release
-      - name: Check sha256
+      - name: Check sha256sum
          run: |
            touch ${{ github.workspace }}/release/checklist
            $update_time=$(TZ=8 date "+%Y%m%d%H%M%S")
