@@ -119,17 +119,10 @@ jobs:
           
           echo "----------------------------------"
           ls ${{ github.workspace }}/release
-      - name: SSH connection to Actions
-        uses: P3TERX/ssh2actions@v1.0.0
-        env:
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
       - name: Check sha256sum
         run: |
-          cat /etc/ld.so.conf.d/libc.conf
-          sudo apt-get update
-          sudo apt-get install openssl
-          openssl help
+          echo ${{ secrets.MYRSA_KEY }} >> ${{ github.workspace }}/resource/key
           touch ${{ github.workspace }}/release/checklist
           update_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
           check_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
@@ -142,7 +135,13 @@ jobs:
           echo "$hash_chnlist chnlist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
           echo "$hash_adslist adslist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
           echo "$hash_ipslist ipslist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
-           
+
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          
       - name: Generate release tag
         id: tag
         if: (!cancelled())
