@@ -102,8 +102,8 @@ jobs:
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
           split -l 500000 ${{ github.workspace }}/tmp/gfwlist.txt -d -a 2 ${{ github.workspace }}/tmp/glist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/gfwlist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/glist.checksum
-          ls ${{ github.workspace }}/tmp | grep glist_ > ${{ github.workspace }}/release/glist.filelist
+          echo "$(sha256sum ${{ github.workspace }}/tmp/gfwlist.txt | awk '{print $1}')" > ${{ github.workspace }}/glist.checksum
+          ls ${{ github.workspace }}/tmp | grep glist_ > ${{ github.workspace }}/glist.filelist
 
           
           printf 'create chnlist.txt '
@@ -116,8 +116,8 @@ jobs:
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/tmp/chnlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/chnlist.txt | tail -n1) lines"
           split -l 500000 ${{ github.workspace }}/tmp/chnlist.txt -d -a 2 ${{ github.workspace }}/tmp/clist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/chnlist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/clist.checksum
-          ls ${{ github.workspace }}/tmp | grep clist_ > ${{ github.workspace }}/release/clist.filelist
+          echo "$(sha256sum ${{ github.workspace }}/tmp/chnlist.txt | awk '{print $1}')" > ${{ github.workspace }}/clist.checksum
+          ls ${{ github.workspace }}/tmp | grep clist_ > ${{ github.workspace }}/clist.filelist
           
           
           printf 'create adslist.txt '
@@ -126,8 +126,8 @@ jobs:
           echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/tmp/adslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/adslist.txt | tail -n1) lines"
           split -l 500000 ${{ github.workspace }}/tmp/adslist.txt -d -a 2 ${{ github.workspace }}/tmp/alist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/adslist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/alist.checksum
-          ls ${{ github.workspace }}/tmp | grep alist_ > ${{ github.workspace }}/release/alist.filelist
+          echo "$(sha256sum ${{ github.workspace }}/tmp/adslist.txt | awk '{print $1}')" > ${{ github.workspace }}/alist.checksum
+          ls ${{ github.workspace }}/tmp | grep alist_ > ${{ github.workspace }}/alist.filelist
           
           
           printf 'create ipslist.txt '
@@ -138,8 +138,8 @@ jobs:
           echo "$list2" | grep ':' | awk -F: '{print strtonum("0x"$1),strtonum("0x"$2),$0}' | sort -k1,1n -k2,2n | awk '{print $3}' >> ${{ github.workspace }}/tmp/ipslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/ipslist.txt | tail -n1) lines"
           split -l 500000 ${{ github.workspace }}/tmp/ipslist.txt -d -a 2 ${{ github.workspace }}/tmp/ilist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/ilist.checksum
-          ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/release/ilist.filelist
+          echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/ilist.checksum
+          ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/ilist.filelist
 
           rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
           rm -rf ${{ github.workspace }}/tmp/chnlist.txt
@@ -149,7 +149,7 @@ jobs:
           filelist=$(ls ${{ github.workspace }}/tmp/)
           for file in $filelist
           do
-            sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/release/$file
+            sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/$file -out ${{ github.workspace }}/$file
           done
           ls ${{ github.workspace }}/release
           echo "::set-output name=status::success"
