@@ -46,8 +46,13 @@ jobs:
           '
 
           create_update_info() {
+            file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
+            echo $(head -n +1  ${{ github.workspace }}/$2.checksum | awk '{print $2}')
+            echo "$file_checksum"
+            echo "$2 $file_checksum" > ${{ github.workspace }}/$2.checksum
             split -l 500000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
-            echo "$2 $(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')" > ${{ github.workspace }}/$2.checksum
+            
+            
 
             rkey=$(head -c 32 /dev/random | base64)
             skey=$(echo -n "$rkey" | sudo openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/resource/rsa.key | sudo openssl enc -A -base64 )
@@ -205,6 +210,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Push commit
+        if: steps.update.outputs.status == 'success' && !cancelled()
         run: |
           rm -rf ${{ github.workspace }}/release.txt
           git config --global user.name "autoupdate"
