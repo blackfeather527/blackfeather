@@ -105,7 +105,7 @@ jobs:
           split -l 500000 ${{ github.workspace }}/tmp/gfwlist.txt -d -a 2 ${{ github.workspace }}/tmp/glist_
           echo "$(sha256sum ${{ github.workspace }}/tmp/gfwlist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/glist.checksum
           ls ${{ github.workspace }}/tmp | grep glist_ > ${{ github.workspace }}/release/glist.filelist
-          rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
+
           
           printf 'create chnlist.txt '
           
@@ -119,7 +119,7 @@ jobs:
           split -l 500000 ${{ github.workspace }}/tmp/chnlist.txt -d -a 2 ${{ github.workspace }}/tmp/clist_
           echo "$(sha256sum ${{ github.workspace }}/tmp/chnlist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/clist.checksum
           ls ${{ github.workspace }}/tmp | grep clist_ > ${{ github.workspace }}/release/clist.filelist
-          rm -rf ${{ github.workspace }}/tmp/chnlist.txt
+          
           
           printf 'create adslist.txt '
           
@@ -129,7 +129,7 @@ jobs:
           split -l 500000 ${{ github.workspace }}/tmp/adslist.txt -d -a 2 ${{ github.workspace }}/tmp/alist_
           echo "$(sha256sum ${{ github.workspace }}/tmp/adslist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/alist.checksum
           ls ${{ github.workspace }}/tmp | grep alist_ > ${{ github.workspace }}/release/alist.filelist
-          rm -rf ${{ github.workspace }}/tmp/adslist.txt
+          
           
           printf 'create ipslist.txt '
           
@@ -141,8 +141,13 @@ jobs:
           split -l 500000 ${{ github.workspace }}/tmp/ipslist.txt -d -a 2 ${{ github.workspace }}/tmp/ilist_
           echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/ilist.checksum
           ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/release/ilist.filelist
-          rm -rf ${{ github.workspace }}/tmp/ipslist.txt
           
+          
+          
+          rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
+          rm -rf ${{ github.workspace }}/tmp/chnlist.txt
+          rm -rf ${{ github.workspace }}/tmp/adslist.txt
+          rm -rf ${{ github.workspace }}/tmp/ipslist.txt
           echo "----------------------------------"          
           ls ${{ github.workspace }}/tmp
           echo "----------------------------------"
