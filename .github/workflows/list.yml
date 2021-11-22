@@ -12,6 +12,8 @@ jobs:
       OISD: https://dbl.oisd.nl/
       MOSDNS: https://github.com/IrineSistiana/mosdns/releases/download/v2.1.2/mosdns-linux-amd64.zip
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
       - name: Install perl
         uses: shogo82148/actions-setup-perl@v1
         with:
@@ -116,7 +118,39 @@ jobs:
           
           echo "----------------------------------"
           ls ${{ github.workspace }}/release
+      - name: Check sha256
+         run: |
+           touch ${{ github.workspace }}/release/checklist
+           $update_time=$(TZ=8 date "+%Y%m%d%H%M%S")
+           $check_time=$(TZ=8 date "+%Y%m%d%H%M%S")
+           hash_gfwlist=$(sha256sum ${{ github.workspace }}/release/gfwlist.txt | awk '{print $1}')
+           hash_chnlist=$(sha256sum ${{ github.workspace }}/release/chnlist.txt | awk '{print $1}')
+           hash_adslist=$(sha256sum ${{ github.workspace }}/release/adslist.txt | awk '{print $1}')
+           hash_ipslist=$(sha256sum ${{ github.workspace }}/release/ipslist.txt | awk '{print $1}')
+           
+           echo "$hash_gfwlist gfwlist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
+           echo "$hash_chnlist chnlist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
+           echo "$hash_adslist adslist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
+           echo "$hash_ipslist ipslist.txt $update_time $check_time" >> ${{ github.workspace }}/release/checklist
+           
+      - name: Generate release tag
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+          touch release.txt
+          echo "::set-output name=status::success"
           
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ github.workspace }}/release/*
+      
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
         with:
