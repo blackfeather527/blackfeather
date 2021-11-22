@@ -121,8 +121,8 @@ jobs:
       - name: Check sha256sum
         run: |
           touch ${{ github.workspace }}/release/checklist
-          update_time=$(TZ=8 date "+%Y%m%d%H%M%S")
-          check_time=$(TZ=8 date "+%Y%m%d%H%M%S")
+          update_time=$(TZ=+8 date "+%Y%m%d%H%M%S")
+          check_time=$(TZ=+8 date "+%Y%m%d%H%M%S")
           hash_gfwlist=$(sha256sum ${{ github.workspace }}/release/gfwlist.txt | awk '{print $1}')
           hash_chnlist=$(sha256sum ${{ github.workspace }}/release/chnlist.txt | awk '{print $1}')
           hash_adslist=$(sha256sum ${{ github.workspace }}/release/adslist.txt | awk '{print $1}')
