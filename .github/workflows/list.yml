@@ -140,17 +140,18 @@ jobs:
           split -l 500000 ${{ github.workspace }}/tmp/ipslist.txt -d -a 2 ${{ github.workspace }}/tmp/ilist_
           echo "$(sha256sum ${{ github.workspace }}/tmp/ipslist.txt | awk '{print $1}')" > ${{ github.workspace }}/release/ilist.checksum
           ls ${{ github.workspace }}/tmp | grep ilist_ > ${{ github.workspace }}/release/ilist.filelist
-          
-          
-          
+
           rm -rf ${{ github.workspace }}/tmp/gfwlist.txt
           rm -rf ${{ github.workspace }}/tmp/chnlist.txt
           rm -rf ${{ github.workspace }}/tmp/adslist.txt
           rm -rf ${{ github.workspace }}/tmp/ipslist.txt
           echo "----------------------------------"          
-          ls ${{ github.workspace }}/tmp
-          echo "----------------------------------"
-          ls ${{ github.workspace }}/release
+          filelist=$(ls ${{ github.workspace }}/tmp/)
+          for file in $filelist
+          do
+            echo $file
+          done
+
           echo "::set-output name=status::success"
 
       - name: Generate release tag
