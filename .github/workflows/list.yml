@@ -89,7 +89,12 @@ jobs:
           echo "----------------------------------"
           
           echo "create Secrets"
-          sudo cat /proc/sys/kernel/random/entropy_avail
+          rkey=$(head -c 32 /dev/random) | base64
+          touch ${{ github.workspace }}/release/checklist
+          echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/tmp/rsa.key
+          skey=$(echo -n "$rkey" | openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/tmp/rsa.key | openssl enc -A -base64)
+          echo "$skey"
+          echo "$skey" >> ${{ github.workspace }}/release/checklist
           printf 'create gfwlist.txt '
           
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
@@ -126,7 +131,7 @@ jobs:
 
       - name: Check sha256sum
         run: |
-          touch ${{ github.workspace }}/release/checklist
+          
           update_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
           check_time=$(date "+%Y-%-m-%d[%H:%M:%S]")
           hash_gfwlist=$(sha256sum ${{ github.workspace }}/release/gfwlist.txt | awk '{print $1}')
