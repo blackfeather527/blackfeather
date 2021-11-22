@@ -108,7 +108,7 @@ jobs:
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
-          sudo openssl enc -aes-256-ofb -k $rkey -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/gfwlist.txt -out ${{ github.workspace }}/release/enclist_1
+          sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/gfwlist.txt -out ${{ github.workspace }}/release/enclist_1
           
           printf 'create chnlist.txt '
           
@@ -120,14 +120,14 @@ jobs:
           cat ${{ github.workspace }}/resource/chnlist.txt | grep -v '\.' | grep -v '^xn--' >> ${{ github.workspace }}/resource/diff.txt
           sort ${{ github.workspace }}/resource/chnlist.txt ${{ github.workspace }}/resource/diff.txt ${{ github.workspace }}/resource/diff.txt | uniq -u >${{ github.workspace }}/tmp/chnlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/chnlist.txt | tail -n1) lines"
-          sudo openssl enc -aes-256-ofb -k $rkey -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/chnlist.txt -out ${{ github.workspace }}/release/enclist_2
+          sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/chnlist.txt -out ${{ github.workspace }}/release/enclist_2
           
           printf 'create adslist.txt '
           
           adslist=$(printf "$oisd_tmp" | grep -v '^#';cat ${{ github.workspace }}/resource/geosite_category-ads-all.txt;cat ${{ github.workspace }}/resource/geosite_win-extra.txt;cat ${{ github.workspace }}/resource/geosite_win-spy.txt;)
           echo "$adslist" | sort -u | grep -v '^$' > ${{ github.workspace }}/tmp/adslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/adslist.txt | tail -n1) lines"
-          sudo openssl enc aes-256-ofb -k $rkey -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/adslist.txt -out ${{ github.workspace }}/release/enclist_3
+          sudo openssl enc aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/adslist.txt -out ${{ github.workspace }}/release/enclist_3
           
           printf 'create ipslist.txt '
           
@@ -136,7 +136,7 @@ jobs:
           echo "$list2" | grep -v ':' | sort -t '.' -k1,1n -k2,2n -k3,3n > ${{ github.workspace }}/tmp/ipslist.txt
           echo "$list2" | grep ':' | awk -F: '{print strtonum("0x"$1),strtonum("0x"$2),$0}' | sort -k1,1n -k2,2n | awk '{print $3}' >> ${{ github.workspace }}/tmp/ipslist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/ipslist.txt | tail -n1) lines"
-          sudo openssl enc aes-256-ofb -k $rkey -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/ipslist.txt -out ${{ github.workspace }}/release/enclist_4
+          sudo openssl enc aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -salt -e -in ${{ github.workspace }}/tmp/ipslist.txt -out ${{ github.workspace }}/release/enclist_4
           
           echo "----------------------------------"
           ls ${{ github.workspace }}/release
