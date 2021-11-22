@@ -44,6 +44,13 @@ jobs:
                s@^[^.]++$@@;
                s@^\s*+$@@
           '
+
+          create_update_info() {
+            split -l 500000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
+            echo "$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')" > ${{ github.workspace }}/$2.checksum
+            ls ${{ github.workspace }}/tmp | grep $2_ >> ${{ github.workspace }}/$2.checksum
+          }
+
           gfwlist_txt_append_domain_names() {
             printf "twimg.edgesuite.net\n"
             printf "blogspot.ae\nblogspot.al\nblogspot.am\nblogspot.ba\nblogspot.be\nblogspot.bg\nblogspot.bj\nblogspot.ca\nblogspot.cat\nblogspot.cf\nblogspot.ch\nblogspot.cl\nblogspot.co.at\nblogspot.co.id\nblogspot.co.il\nblogspot.co.ke\nblogspot.com\nblogspot.com.ar\nblogspot.com.au\nblogspot.com.br\nblogspot.com.by\nblogspot.com.co\nblogspot.com.cy\nblogspot.com.ee\nblogspot.com.eg\nblogspot.com.es\nblogspot.com.mt\nblogspot.com.ng\nblogspot.com.tr\nblogspot.com.uy\nblogspot.co.nz\nblogspot.co.uk\nblogspot.co.za\nblogspot.cv\nblogspot.cz\nblogspot.de\nblogspot.dk\nblogspot.fi\nblogspot.fr\nblogspot.gr\nblogspot.hk\nblogspot.hr\nblogspot.hu\nblogspot.ie\nblogspot.in\nblogspot.is\nblogspot.it\nblogspot.jp\nblogspot.kr\nblogspot.li\nblogspot.lt\nblogspot.lu\nblogspot.md\nblogspot.mk\nblogspot.mr\nblogspot.mx\nblogspot.my\nblogspot.nl\nblogspot.no\nblogspot.pe\nblogspot.pt\nblogspot.qa\nblogspot.re\nblogspot.ro\nblogspot.rs\nblogspot.ru\nblogspot.se\nblogspot.sg\nblogspot.si\nblogspot.sk\nblogspot.sn\nblogspot.td\nblogspot.tw\nblogspot.ug\nblogspot.vn\n"
@@ -105,9 +112,7 @@ jobs:
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
           echo "$gfwlist_all" | sort -u | grep -v '\.cn$' > ${{ github.workspace }}/tmp/gfwlist.txt
           echo "$(awk '{print NR}' ${{ github.workspace }}/tmp/gfwlist.txt |tail -n1) lines"
-          split -l 500000 ${{ github.workspace }}/tmp/gfwlist.txt -d -a 2 ${{ github.workspace }}/tmp/glist_
-          echo "$(sha256sum ${{ github.workspace }}/tmp/gfwlist.txt | awk '{print $1}')" > ${{ github.workspace }}/glist.checksum
-          ls ${{ github.workspace }}/tmp | grep glist_ > ${{ github.workspace }}/glist.filelist
+          create_update_info gfwlist.txt glist
 
           
           printf 'create chnlist.txt '
@@ -205,8 +210,8 @@ jobs:
       - name: Push commit
         run: |
           rm -rf ${{ github.workspace }}/release.txt
-          git config --global user.name "secrets.USERNAME"
-          git config --global user.email "secrets.USEREMAIL"
+          git config --global user.name "autoupdate"
+          git config --global user.email "none"
           git add -A
           git commit -am "Automated report"
           git push
