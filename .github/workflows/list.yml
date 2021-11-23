@@ -1,6 +1,5 @@
-name: GitHub Actions Demo
+name: Update List Actions
 on: 
-  push:
   workflow_dispatch:
   schedule:
     - cron: '0 19 * * *'
