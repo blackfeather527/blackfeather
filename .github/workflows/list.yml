@@ -233,7 +233,7 @@ jobs:
           done
           for file in ${{ github.workspace }}/release/
           do
-            if [ test -f $file ];then
+            if [ -f $file ];then
               echo "refresh https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/release/$file"
               wget -q https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/release/$file -O /dev/null
             fi
