@@ -67,7 +67,7 @@ jobs:
                 command=" .$2.part | length "
                 echo "$command"
                 count=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
-                command=" .$2.part.[].name=$file "
+                command=" .$2.part.[].name=\"$file\""
                 echo "$command"
                 yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash
                 command=" .$2.part.[$count].hash=$parthash "
