@@ -66,7 +66,7 @@ jobs:
                 updatetime=$(date "+%Y-%m-%d/%H:%M:%S")
                 command=" .$2.part | length "
                 count=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
-                command=" .$2.part.[$count].name=\"$file\" |  .$2.part.[$count].hash=\"$parthash\"
+                command=" .$2.part.[$count].name=\"$file\" |  .$2.part.[$count].hash=\"$parthash\""
                 yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash
               done
             else
