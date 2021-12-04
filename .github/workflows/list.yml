@@ -115,8 +115,11 @@ jobs:
           oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
           echo "----------------------------------"
-          cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
-          
+          if [ -f ${{ github.workspace }}/check_hash ]; then
+            cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
+          else
+            touch ${{ github.workspace }}/resource/check_hash
+          fi
           
           printf 'create gfwlist.txt '
           
