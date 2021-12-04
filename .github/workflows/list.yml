@@ -47,12 +47,12 @@ jobs:
 
           create_update_info() {
             command=" .$2.hash "
-            file_checksum=$(yq e --unwrapScalar "'$command'" ${{ github.workspace }}/check_hash)
+            file_checksum=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
             old_checksum=$(head -n +1  ${{ github.workspace }}/$2.checksum | awk '{print $2}')
             if [ "$old_checksum" != "$file_checksum" ]; then
               updatetime=$(date "+%s")
               command=" .$2.hash=$file_checksum | .$2.update=$updatetime" 
-              yq e -i --unwrapScalar "'$command'" ${{ github.workspace }}/check_hash
+              yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash
               split -l 250000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
               rkey=$(head -c 32 /dev/random | base64)
               skey=$(echo -n "$rkey" | sudo openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/resource/rsa.key | sudo openssl enc -A -base64 )
