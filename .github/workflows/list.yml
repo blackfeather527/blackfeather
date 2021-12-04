@@ -126,7 +126,6 @@ jobs:
           
           echo "----------------------------------"
           cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
-          echo '' > ${{ github.workspace }}/check_hash
           echo $(date "+%Y-%m-%d %H:%M:%S") > ${{ github.workspace }}/check_time
           
           printf 'create gfwlist.txt '
