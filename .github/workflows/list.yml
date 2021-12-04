@@ -176,7 +176,7 @@ jobs:
           rm -rf ${{ github.workspace }}/mosdns.zip
           rm -rf ${{ github.workspace }}/mosdns
           rm -rf ${{ github.workspace }}/mosdns-master
-          echo "$(date "+%Y-%m-%d %H:%M:%S") $(sha256sum ${{ github.workspace }}/check_hash | awk '{print $1}')"> ${{ github.workspace }}/check_time
+          echo "$(sha256sum ${{ github.workspace }}/check_hash | awk '{print $1}')"> ${{ github.workspace }}/check_time
           echo "::set-output name=status::success"
 
       - name: Generate release tag
