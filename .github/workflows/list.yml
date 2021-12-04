@@ -46,27 +46,19 @@ jobs:
           '
 
           create_update_info() {
-            command=" .$2.hash "
-            old_checksum=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/resource/check_hash)
-            file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
+            local old_checksum=$(yq e --unwrapScalar ".$2.hash" ${{ github.workspace }}/resource/check_hash)
+            local file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
             if [ "$old_checksum" != "$file_checksum" ]; then
-              updatetime=$(date "+%s")
-              command=" .$2.hash=\"$file_checksum\" | .$2.update=$updatetime" 
-              yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
+              yq e -i --unwrapScalar ".$2.hash=\"$file_checksum\" | .$2.update=\"$(date "+%Y-%m-%d/%H:%M:%S")\"" ${{ github.workspace }}/check_hash
               split -l 250000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
-              rkey=$(head -c 32 /dev/random | base64)
+              local rkey=$(head -c 32 /dev/random | base64)
               
-              filelist=$(ls ${{ github.workspace }}/tmp | grep $2_ )
+              local filelist=$(ls ${{ github.workspace }}/tmp | grep $2_ )
               for file in $filelist
               do
                 echo -n "$rkey|" > ${{ github.workspace }}/release/$file
                 sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -e -in ${{ github.workspace }}/tmp/$file | sudo openssl enc -A -base64 >> ${{ github.workspace }}/release/$file
-                parthash=$(sha256sum ${{ github.workspace }}/release/$file | awk '{print $1}')
-                updatetime=$(date "+%Y-%m-%d/%H:%M:%S")
-                command=" .$2.part | length "
-                count=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
-                command=" .$2.part.[$count].name=\"$file\" |  .$2.part.[$count].hash=\"$parthash\""
-                yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
+                yq e -i --unwrapScalar " .$2.part.$file.hash=\"$(sha256sum ${{ github.workspace }}/release/$file | awk '{print $1}')\"" ${{ github.workspace }}/check_hash
               done
             else
               echo "no change,skip $1"
