@@ -22,7 +22,8 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: '5.34'
-
+      - name: Install yq
+        uses: mikefarah/yq@v4.16.1
       - name: Update list
         id: update
         run: |
@@ -45,11 +46,12 @@ jobs:
           '
 
           create_update_info() {
-            file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
+            command=" .$2.hash "
+            file_checksum=yq e --unwrapScalar $command ${{ github.workspace }}/check_hash
             old_checksum=$(head -n +1  ${{ github.workspace }}/$2.checksum | awk '{print $2}')
-            if [ "$file_checksum" != "$old_checksum" ];then
+            if [ "$old_checksum" = "$file_checksum" ]; then
               echo "$2 $file_checksum $(date "+%Y-%m-%d/%H:%M:%S")" > ${{ github.workspace }}/$2.checksum
-              split -l 500000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
+              split -l 250000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
               rkey=$(head -c 32 /dev/random | base64)
               skey=$(echo -n "$rkey" | sudo openssl rsautl -encrypt -pubin -inkey ${{ github.workspace }}/resource/rsa.key | sudo openssl enc -A -base64 )
             
@@ -115,6 +117,7 @@ jobs:
           oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
           echo "----------------------------------"
+          echo '' > ${{ github.workspace }}/check_hash
           echo $(date "+%Y-%m-%d %H:%M:%S") > ${{ github.workspace }}/check_time
           echo "read Secrets"
           echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/resource/rsa.key
