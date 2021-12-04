@@ -50,7 +50,7 @@ jobs:
             file_checksum=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
             old_checksum=$(head -n +1  ${{ github.workspace }}/$2.checksum | awk '{print $2}')
             if [ "$old_checksum" != "$file_checksum" ]; then
-              updatetime=$(date "+%Y-%m-%d/%H:%M:%S")
+              updatetime=$(date "+%Y%m%d%H%M%S")
               command=" .$2.hash=$file_checksum | .$2.update=$updatetime" 
               yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
               split -l 250000 ${{ github.workspace }}/tmp/$1 -d -a 2 ${{ github.workspace }}/tmp/$2_
