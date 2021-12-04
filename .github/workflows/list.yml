@@ -65,14 +65,9 @@ jobs:
                 parthash=$(sha256sum ${{ github.workspace }}/release/$file | awk '{print $1}')
                 updatetime=$(date "+%Y-%m-%d/%H:%M:%S")
                 command=" .$2.part | length "
-                echo "$command"
                 count=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
-                command=" .$2.part.[].name=\"$file\""
-                echo "$command"
+                command=" .$2.part.[$count].name=\"$file\" |  .$2.part.[$count].hash=\"$parthash\"
                 yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash
-                command=" .$2.part.[$count].hash=$parthash "
-                echo "$command"
-                yq e -i --unwrapScalar "'$command'" ${{ github.workspace }}/check_hash
               done
             else
               echo "no change,skip $1"
