@@ -47,7 +47,7 @@ jobs:
 
           create_update_info() {
             command=" .$2.hash "
-            old_checksum=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/check_hash)
+            old_checksum=$(yq e --unwrapScalar "$command" ${{ github.workspace }}/resource/check_hash)
             file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
             echo "$old_checksum"
             echo "$file_checksum"
@@ -125,10 +125,10 @@ jobs:
           oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
           echo "----------------------------------"
+          cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
           echo '' > ${{ github.workspace }}/check_hash
           echo $(date "+%Y-%m-%d %H:%M:%S") > ${{ github.workspace }}/check_time
-          echo "read Secrets"
-          echo "${{ secrets.MYRSA_KEY }}" > ${{ github.workspace }}/resource/rsa.key
+          
           printf 'create gfwlist.txt '
           
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
