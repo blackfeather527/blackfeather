@@ -226,15 +226,11 @@ jobs:
         run: |
           for file in ${{ github.workspace }}/
           do
-            if [ test -f $file ];then
               echo "refresh https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/$file"
               wget -q https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/$file -O /dev/null
-            fi
           done
           for file in ${{ github.workspace }}/release/
           do
-            if [ -f $file ];then
               echo "refresh https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/release/$file"
               wget -q https://cdn.jsdelivr.net/gh/blackfeather527/blackfeather/release/$file -O /dev/null
-            fi
           done
