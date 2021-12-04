@@ -70,8 +70,6 @@ jobs:
                 yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
                 command=" .$2.part.[$count].hash=$parthash "
                 yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
-                command=" .$2.part.[$count].update=$updatetime "
-                yq e -i --unwrapScalar "$command" ${{ github.workspace }}/check_hash
               done
             else
               echo "no change,skip $1"
