@@ -115,12 +115,10 @@ jobs:
           oisd_tmp=$(wget -qO- ${{ env.OISD }})
           
           echo "----------------------------------"
-          if [ -f ${{ github.workspace }}/check_hash ]; then
-            cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
-          else
-            touch ${{ github.workspace }}/resource/check_hash
+          if [ ! -f ${{ github.workspace }}/check_hash ]; then
+            touch ${{ github.workspace }}/check_hash
           fi
-          
+          cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/resource/check_hash
           printf 'create gfwlist.txt '
           
           gfwlist_all=$(echo "$gfwlist_tmp" | $base64_decode | { perl -pe "$gfwlist_txt_perl_script_string"; gfwlist_txt_append_domain_names; };cat ${{ github.workspace }}/resource/geosite_gfw.txt;cat ${{ github.workspace }}/resource/geosite_greatfire.txt;)
