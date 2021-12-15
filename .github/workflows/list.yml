@@ -214,4 +214,4 @@ jobs:
           git config --global user.email "none"
           git add -A
           git commit -am "Automated report"
-          git push
+          git push --force
