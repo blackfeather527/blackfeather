@@ -2,7 +2,7 @@ name: Update List Actions
 on: 
   workflow_dispatch:
   schedule:
-    - cron: '0 19 * * *'
+    - cron: '0 16 * * *'
 jobs:
   Get-All-List:
     runs-on: ubuntu-latest
