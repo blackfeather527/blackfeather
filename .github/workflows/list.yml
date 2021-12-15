@@ -53,7 +53,7 @@ jobs:
             local old_checksum=$(yq e --unwrapScalar ".$2.hash" ${{ github.workspace }}/resource/check_hash)
             local file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
             if [ "$old_checksum" != "$file_checksum" ]; then
-              yq e -i --unwrapScalar ".$2.hash=\"$file_checksum\" | .$2.update=\"$(date "+%Y-%m-%d/%H:%M:%S")\" | .$2.lenght=\"$(awk '{print NR}' ${{ github.workspace }}/tmp/$1 | tail -n1)\"" ${{ github.workspace }}/check_hash
+              yq e -i --unwrapScalar ".$2.hash=\"$file_checksum\" | .$2.update=\"$(date "+%Y-%m-%d/%H:%M:%S")\" | .$2.lines=\"$(awk '{print NR}' ${{ github.workspace }}/tmp/$1 | tail -n1)\"" ${{ github.workspace }}/check_hash
               local rkey=$(head -c 32 /dev/random | base64)
               echo -n "$rkey " > ${{ github.workspace }}/release/$2
               sudo openssl enc -aes-256-ofb -k "$rkey" -md sha512 -pbkdf2 -iter 100000 -e -in ${{ github.workspace }}/tmp/$1 | sudo openssl enc -A -base64 >> ${{ github.workspace }}/release/$2
