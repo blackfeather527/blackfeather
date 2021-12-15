@@ -49,7 +49,8 @@ jobs:
             echo "start update $1"
             echo "" >> ${{ github.workspace }}/tmp/$1
             echo "step 0"
-            cat ${{ github.workspace }}/tmp/$1 | grep -v '^$' > ${{ github.workspace }}/tmp/$1
+            cat ${{ github.workspace }}/tmp/$1 | grep -v '^$' > ${{ github.workspace }}/tmp/$1_
+            cat ${{ github.workspace }}/tmp/$1_
             echo "step 1"
             local old_checksum=$(yq e --unwrapScalar ".$2.hash" ${{ github.workspace }}/resource/check_hash)
             echo "step 2"
