@@ -46,18 +46,13 @@ jobs:
           '
 
           create_update_info() {
-            echo "start update $1"
             echo "" >> ${{ github.workspace }}/tmp/$1
-            echo "step 0"
             cat ${{ github.workspace }}/tmp/$1 | grep -v '^$' > ${{ github.workspace }}/tmp/$1_
-            cat ${{ github.workspace }}/tmp/$1_
-            echo "step 1"
+            rm -rf ${{ github.workspace }}/tmp/$1
+            mv ${{ github.workspace }}/tmp/$1_ ${{ github.workspace }}/tmp/$1
             local old_checksum=$(yq e --unwrapScalar ".$2.hash" ${{ github.workspace }}/resource/check_hash)
-            echo "step 2"
             local file_checksum=$(sha256sum ${{ github.workspace }}/tmp/$1 | awk '{print $1}')
-            echo "step 3"
             if [ "$old_checksum" != "$file_checksum" ]; then
-              echo "start crypt $1 to $2"
               yq e -i --unwrapScalar ".$2.hash=\"$file_checksum\" | .$2.update=\"$(date "+%Y-%m-%d/%H:%M:%S")\" | .$2.lenght=\"$(awk '{print NR}' ${{ github.workspace }}/tmp/$1 | tail -n1)\"" ${{ github.workspace }}/check_hash
               local rkey=$(head -c 32 /dev/random | base64)
               echo -n "$rkey " > ${{ github.workspace }}/release/$2
@@ -67,7 +62,6 @@ jobs:
             else
               echo "no change,skip $1"
             fi
-            echo "done"
           }
 
           gfwlist_txt_append_domain_names() {
