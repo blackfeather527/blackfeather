@@ -161,7 +161,7 @@ jobs:
           rm -rf ${{ github.workspace }}/tmp/chnlist.txt
           rm -rf ${{ github.workspace }}/tmp/adslist.txt
           rm -rf ${{ github.workspace }}/tmp/ipslist.txt
-
+          cp -rf ${{ github.workspace }}/check_hash ${{ github.workspace }}/release/check_hash
           echo "----------------------------------"
           
           rm -rf ${{ github.workspace }}/tmp
@@ -170,6 +170,7 @@ jobs:
           rm -rf ${{ github.workspace }}/mosdns
           rm -rf ${{ github.workspace }}/mosdns-master
           echo "$(sha256sum ${{ github.workspace }}/check_hash | awk '{print $1}')"> ${{ github.workspace }}/check_flags
+          cp -rf ${{ github.workspace }}/check_flags ${{ github.workspace }}/release/check_flags
           echo "::set-output name=status::success"
 
       - name: Generate release tag
