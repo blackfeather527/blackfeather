@@ -3,13 +3,13 @@ glist:
   update: 2023-09-19/00:23:16
   lines: "6148"
 clist:
-  hash: a8630b918909db5421363ec01ba995ee9d443191d380ffb7ccd0102dbf5eddc6
-  update: 2023-10-17/00:24:13
-  lines: "78813"
+  hash: 3f5a31156b5384520d580d5cc0f961c0b01fced0dd7f17bd03943271b7f25127
+  update: 2023-10-18/00:23:10
+  lines: "78800"
 alist:
-  hash: dc972d7d7880a812067bc5232a659f8c2dffb72ed96707ff71ecc7a131c1a2be
-  update: 2023-10-17/00:24:14
-  lines: "229139"
+  hash: 48ab7c90ab9e27916c0fc8c7ea9cfb5622d065a64ab66f58edc0e92535887022
+  update: 2023-10-18/00:23:11
+  lines: "226863"
 ilist:
   hash: d9337efed7bc3f66e1f1a71c18647575b3dcca04c3bd3fb1f54c20f98a269bce
   update: 2023-10-16/00:20:42
