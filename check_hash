@@ -7,10 +7,10 @@ clist:
   update: 2025-07-16/00:34:43
   lines: "146191"
 alist:
-  hash: d028cfca03053a9cf544cc3016fbe8e62b73ff4fbf8cc301bf90ca1785881077
-  update: 2025-07-18/00:34:52
-  lines: "429207"
+  hash: 3320b5bd2d92cbb3827b8a4dea8e297b7f4254926890ae8cb756e2a6ec0f2a0e
+  update: 2025-07-19/00:35:05
+  lines: "285136"
 ilist:
-  hash: 99f072c995f7adf2d07ce93945e4817fe37e7e92975c82281f56d974f296860c
-  update: 2025-07-16/00:34:45
-  lines: "23791"
+  hash: bd1d45e20258ccf03a9b18cc2dbd2211baff384e29ead2eddee0f3cfaad02ba8
+  update: 2025-07-19/00:35:06
+  lines: "23776"
