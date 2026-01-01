@@ -1,16 +1,16 @@
 glist:
-  hash: e371a8192c23ae45852dd7d1c9392dccb07f5e5ce84c8fa195c925bf09a13caf
-  update: 2025-12-29/00:32:40
-  lines: "5973"
+  hash: 1f0d8447abda66c89ce8f30f87b795022c1b21afc22e53789edee020faf352b6
+  update: 2026-01-02/00:35:26
+  lines: "5975"
 clist:
-  hash: a4c6fa8681d8cd8b413bfd880fa88d2218dee757b6bef171dff4789eb6a40f9d
-  update: 2026-01-01/00:33:51
-  lines: "136221"
+  hash: 9b0640e879dc00451afffdaee2d5a457da10a664c2bee7406fc8aa616f83268e
+  update: 2026-01-02/00:35:27
+  lines: "136224"
 alist:
-  hash: a3cde6b167ae915344767ad2a6399225f771d2fac7a140871e2af56b2b0b8324
-  update: 2026-01-01/00:33:52
-  lines: "306397"
+  hash: 6801d2ab55fbc86ec5c9be6cbfc5fe1507c53cc5f87101bbd3297a9a18a1dcc5
+  update: 2026-01-02/00:35:28
+  lines: "306557"
 ilist:
-  hash: d7c290eac7d8ec86c13c9382b539912d5546b8036ce6780fcfc2e9c506bfe8ab
-  update: 2025-12-27/00:31:55
-  lines: "24222"
+  hash: 2878ca0aaec8505da5f6dec26ece99130f1766d6c7742dd9e5265e33b4576030
+  update: 2026-01-02/00:35:29
+  lines: "15477"
